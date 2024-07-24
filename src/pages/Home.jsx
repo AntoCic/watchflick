@@ -34,10 +34,8 @@ function Home() {
   };
 
   return (
-    <main className='container mx-auto px-4 my-4 text-center'>
-      <h1 className='text-5xl'>Template <a className='inline-block text-blue-600' href="https://github.com/AntoCic" target="_blank">
-        /AntoCic
-      </a> React</h1>
+    <div className='container mx-auto px-4 my-4 text-center'>
+      <h1 className='text-5xl'>WatchFlick</h1>
       <a className='inline-block' href="https://vitejs.dev" target="_blank">
         <img src={viteLogo} className="home-loghi" alt="Vite logo" />
       </a>
@@ -55,7 +53,7 @@ function Home() {
       {posts.length > 0 && <p key={posts[count - 1].id + 'ps'} ><button className={btn.outWhite}> <Link to={`post/${posts[count - 1].id}`} >OPEN POST: {posts[count - 1].title}</Link></button></p>}
       <CmpUtility addTask={addTask}>Click to change post : </CmpUtility>
       <div>{tasks.map((task) => (<p key={task.id}>{task.task}</p>))}</div>
-    </main>
+    </div>
   )
 }
 
