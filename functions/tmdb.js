@@ -29,6 +29,7 @@
 // };
 
 const { TMDB_KEY } = process.env;
+// const TMDB_KEY = "CHIAVE";
 
 let fulldb = {};
 let conterCallApi = 0
