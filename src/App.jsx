@@ -4,7 +4,8 @@ import Footer from './componets/Footer'
 
 import { useEffect } from 'react'
 import { useDispatch } from 'react-redux';
-import { set } from './redux/postSlice'
+import { set } from './redux/moviesSlice'
+import axios from 'axios';
 
 
 function App() {
@@ -12,10 +13,9 @@ function App() {
 
   useEffect(() => {
     console.log("First API call");
-    fetch('https://jsonplaceholder.typicode.com/posts')
-      .then(response => response.json())
+    axios.get('/api/tmdb')
       .then((res) => {
-        dispatch(set(res));
+        dispatch(set(res.data));
       })
   }, []);
 
