@@ -15,6 +15,7 @@ function App() {
     console.log("First API call");
     axios.get('/api/tmdb')
       .then((res) => {
+        console.log(res.data);
         dispatch(set(res.data));
       })
   }, []);

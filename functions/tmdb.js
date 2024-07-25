@@ -29,10 +29,10 @@
 // };
 
 const { TMDB_KEY } = process.env;
-import axios from "axios";
+// import axios from "axios";
 
 let fulldb = {};
-let conterCallApi = 0
+// let conterCallApi = 0
 
 exports.handler = async function (event, context) {
     try {
@@ -128,17 +128,30 @@ function parseMovies(res) {
 }
 
 async function getMoviePopularity() {
-    return await axios.get('https://api.themoviedb.org/3/discover/movie', {
-        params: {
-            api_key: TMDB_KEY,
-            language: 'it_IT',
-            sort_by: 'popularity.desc'
-        }
-    }).then((res) => {
-        conterCallApi++;
-        console.log("--- chiamata API n: " + conterCallApi);
-        fulldb.popularity = parseMovies(res.data.results)
-        return fulldb.popularity
-    })
+    return [{
+        adult: false,
+        genre_ids: (4)[16, 10751, 12, 35],
+        id: 1022789,
+        img_main: "/xg27NrXi7VXCGUr7MG75UqLl6Vg.jpg",
+        img_poster: "/vpnVM9B6NMmQpWeZvzLvDESb2QY.jpg",
+        original_language: "en",
+        original_title: "Inside Out 2",
+        plot: "Teenager Riley's mind headquarters is undergoing a sudden demolition to make room for something entirely unexpected: new Emotions! Joy, Sadness, Anger, Fear and Disgust, who’ve long been running a successful operation by all accounts, aren’t sure how to feel when Anxiety shows up. And it looks like she’s not alone.",
+        popularity: 4645.667,
+        title: "Inside Out 2",
+        vote_average: 7.644,
+    }]
+    // return await axios.get('https://api.themoviedb.org/3/discover/movie', {
+    //     params: {
+    //         api_key: TMDB_KEY,
+    //         language: 'it_IT',
+    //         sort_by: 'popularity.desc'
+    //     }
+    // }).then((res) => {
+    //     conterCallApi++;
+    //     console.log("--- chiamata API n: " + conterCallApi);
+    //     fulldb.popularity = parseMovies(res.data.results)
+    //     return fulldb.popularity
+    // })
 }
 
