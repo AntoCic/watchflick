@@ -29,10 +29,9 @@
 // };
 
 const { TMDB_KEY } = process.env;
-// import axios from "axios";
 
 let fulldb = {};
-// let conterCallApi = 0
+let conterCallApi = 0
 
 exports.handler = async function (event, context) {
     try {
@@ -128,30 +127,32 @@ function parseMovies(res) {
 }
 
 async function getMoviePopularity() {
-    return [{
-        adult: false,
-        genre_ids: (4)[16, 10751, 12, 35],
-        id: 1022789,
-        img_main: "/xg27NrXi7VXCGUr7MG75UqLl6Vg.jpg",
-        img_poster: "/vpnVM9B6NMmQpWeZvzLvDESb2QY.jpg",
-        original_language: "en",
-        original_title: "Inside Out 2",
-        plot: "Teenager Riley's mind headquarters is undergoing a sudden demolition to make room for something entirely unexpected: new Emotions! Joy, Sadness, Anger, Fear and Disgust, who’ve long been running a successful operation by all accounts, aren’t sure how to feel when Anxiety shows up. And it looks like she’s not alone.",
-        popularity: 4645.667,
-        title: "Inside Out 2",
-        vote_average: 7.644,
-    }]
-    // return await axios.get('https://api.themoviedb.org/3/discover/movie', {
-    //     params: {
-    //         api_key: TMDB_KEY,
-    //         language: 'it_IT',
-    //         sort_by: 'popularity.desc'
-    //     }
-    // }).then((res) => {
-    //     conterCallApi++;
-    //     console.log("--- chiamata API n: " + conterCallApi);
-    //     fulldb.popularity = parseMovies(res.data.results)
-    //     return fulldb.popularity
-    // })
+    const moviesPopularity = await fatchGetMovie({
+        language: 'it_IT',
+        sort_by: 'popularity.desc'
+    })
+    fulldb.popularity = parseMovies(moviesPopularity)
+    return fulldb.popularity
+}
+
+async function fatchGetMovie(params) {
+    const paramsPlusKey = {
+        api_key: TMDB_KEY,
+        ...params,
+    }
+    const query = Object.keys(paramsPlusKey)
+        .map(k => encodeURIComponent(k) + '=' + encodeURIComponent(paramsPlusKey[k]))
+        .join('&');
+
+    conterCallApi++;
+    console.log("--- chiamata API n: " + conterCallApi);
+
+    return fetch('https://api.themoviedb.org/3/discover/movie?' + query)
+        .then(result => result.json())
+        .then((res) => {
+            return res.results
+        }).catch(function (error) {
+            console.log('request failed', error)
+        });
 }
 
