@@ -1,0 +1,35 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+    margin: 0;
+    min-height: 100vh;
+}
+
+#root {
+    font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+    color: #F1F7FC;
+    background-color: #030a1c;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+header,
+footer {
+    flex-shrink: 0;
+}
+
+main {
+    flex-grow: 1;
+}
+
+/* UTILITY */
+.ms-bg-orange {
+    background-color: #e79200;
+}
+
+.ms-text-orange {
+    color: #e79200;
+}

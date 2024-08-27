@@ -1,0 +1,13 @@
+{
+    "short_name": "WatchFlick",
+    "name": "WatchFlick",
+    "icons": [
+        {
+            "src": "/logo.png",
+            "type": "image/png",
+            "sizes": "192x192"
+        }
+    ],
+    "theme_color": "#030a1c",
+    "display": "fullscreen"
+}
