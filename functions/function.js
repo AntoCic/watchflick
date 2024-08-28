@@ -73,6 +73,7 @@ async function fillDatabase() {
     database.film.action = await callTMDB('discover/movie', { language: 'it_IT', sort_by: 'popularity.desc', with_genres: 28 })
     database.film.comedy = await callTMDB('discover/movie', { language: 'it_IT', sort_by: 'popularity.desc', with_genres: 35 })
     database.film.upcoming = await callTMDB('movie/upcoming', { language: 'it_IT' })
+    database.film.ciao = { ciao: 'test' }
 
     database.series = {}
     database.series.popular = await callTMDB('discover/tv', { language: 'it_IT', sort_by: 'popularity.desc' })
@@ -99,7 +100,7 @@ async function callTMDB(action = 'discover/movie', params = { language: 'it_IT',
         .then(res => {
             return parseMovies(res.results)
         })
-        .catch(err => console.error('|I| ' + err));
+        .catch(err => { console.error('|I| ' + err); return err });
 
 }
 function parseMovies(res) {
