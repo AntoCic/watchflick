@@ -28,7 +28,7 @@ export default function RowMovies({ movies }) {
         ref={containerRef}
         className='overflow-x-hidden whitespace-nowrap scroll-smooth'
       >
-        {movies && movies.map((movie) => (
+        {movies && movies.filter(movie => movie.img_main).map((movie) => (
           <div
             key={movie.id}
             className='border-2 border-slate-700 inline-block p-2 rounded my-3 w-60 mr-4'

@@ -1,6 +1,10 @@
+import { Link } from 'react-router-dom';
+import reactLogo from '../assets/img/react.svg'
+import reduxLogo from '../assets/img/redux.svg'
+import tailwindLogo from '../assets/img/tailwind.svg'
+import viteLogo from '/vite.svg'
 // STYLE
 import '../style/Footer.css'
-import { Link } from 'react-router-dom';
 function Footer() {
 
   return (
@@ -9,15 +13,30 @@ function Footer() {
       <div className="container mx-auto px-4 py-2">
         <div className="flex flex-wrap items-center text-white">
           <div className="flex-1 px-4">
+
+            <p className="mb-0">
+              <a className='inline-block' href="https://vitejs.dev" target="_blank">
+                <img src={viteLogo} className="home-loghi" alt="Vite logo" />
+              </a>
+              <a className='inline-block' href="https://react.dev" target="_blank">
+                <img src={reactLogo} className="home-loghi react" alt="React logo" />
+              </a>
+              <a className='inline-block' href="https://redux.js.org/tutorials/quick-start" target="_blank">
+                <img src={reduxLogo} className="home-loghi redux" alt="React logo" />
+              </a>
+              <a className='inline-block' href="https://tailwindcss.com/docs/container" target="_blank">
+                <img src={tailwindLogo} className="home-loghi tailwind" alt="React logo" />
+              </a>
+            </p>
             <p className="mb-0">Antonino Cicala &copy;2024.</p>
           </div>
           <div className="flex-none px-4">
             <Link to={`contact`} >
-              <span className='hover:underline cursor-pointer' >
+              <span className='underline cursor-pointer' >
                 Contatti
               </span>
             </Link>
-            <ul className="flex flex-row-reverse gap-2">
+            <ul className="flex flex-row-reverse gap-2 mt-1">
               <li>
                 <a href="https://github.com/AntoCic" target="_blank">
                   <svg xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" width="25"

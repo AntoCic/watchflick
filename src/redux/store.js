@@ -1,12 +1,11 @@
 import { configureStore } from '@reduxjs/toolkit'
-// import { counterReducer } from './counterSlice'
-// import { postReducer } from './postSlice'
+
 import { moviesReducer } from './moviesSlice'
+import { currentSearchReducer } from './currentSearchSlice'
 
 export default configureStore({
     reducer: {
         movies: moviesReducer,
-        // counter: counterReducer,
-        // post: postReducer
+        currentSearch: currentSearchReducer,
     }
 })

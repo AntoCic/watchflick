@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit'
 
-export const postSlice = createSlice({
-    name: 'post',
+export const currentSearchSlice = createSlice({
+    name: 'search',
     initialState: {
         value: []
     },
@@ -14,6 +14,6 @@ export const postSlice = createSlice({
 })
 
 // Action creators are generated for each case reducer function
-export const { set } = postSlice.actions
+export const { set } = currentSearchSlice.actions
 
-export const postReducer = postSlice.reducer
+export const currentSearchReducer = currentSearchSlice.reducer

@@ -7,50 +7,30 @@
 
 const { TMDB_KEY } = process.env;
 
-let database = {};
-
 exports.handler = async function (event) {
     await router.start(event);
 
 
     await router.GET('all', async () => {
-        if (!database.film || !database.series) {
-            await fillDatabase();
-        }
-        router.setRes(database);
+        router.setRes(await TMDB.data());
     })
 
-    await router.POST('search', async () => {
-        let { query } = router.bodyParams
-        if (data) {
-            const res = await callTMDB('search/multi', { query, language: 'it_IT' })
-
-            if (res) { router.setRes(res); }
+    await router.POST('get', async () => {
+        const where = router.params(1)
+        if (where) {
+            if (where === 'film' || where === 'series') {
+                let query = router.bodyParams ? router.bodyParams.query !== undefined ? router.bodyParams.query : null : null
+                let genre = router.bodyParams ? router.bodyParams.genre !== undefined ? router.bodyParams.genre : null : null
+                router.setRes(await TMDB[where].search(query, genre));
+            }
         } else {
-            router.error(400, '|I| Missing query');
-        }
+            let { query } = router.bodyParams
 
-    })
-
-    await router.POST('search-film', async () => {
-        let { query } = router.bodyParams
-        if (data) {
-            const res = await callTMDB('search/movie', { query, language: 'it_IT' })
-
-            if (res) { router.setRes(res); }
-        } else {
-            router.error(400, '|I| Missing query');
-        }
-    })
-
-    await router.POST('search-series', async () => {
-        let { query } = router.bodyParams
-        if (data) {
-            const res = await callTMDB('search/tv', { query, language: 'it_IT' })
-
-            if (res) { router.setRes(res); }
-        } else {
-            router.error(400, '|I| Missing query');
+            if (query) {
+                router.setRes(await TMDB.search(query));
+            } else {
+                router.error(400, '|I| Missing query');
+            }
         }
     })
 
@@ -66,21 +46,251 @@ exports.handler = async function (event) {
 //  \___/  |_| |___|_____|___| |_| |___|_____|____/            |
 //                                                             |
 // %-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%
+class Collections {
+    constructor(name, genres) {
+        this.name = name
+        this.genres = genres
 
-async function fillDatabase() {
-    database.film = {}
-    database.film.popular = await callTMDB('discover/movie', { language: 'it_IT', sort_by: 'popularity.desc' })
-    database.film.action = await callTMDB('discover/movie', { language: 'it_IT', sort_by: 'popularity.desc', with_genres: 28 })
-    database.film.comedy = await callTMDB('discover/movie', { language: 'it_IT', sort_by: 'popularity.desc', with_genres: 35 })
-    database.film.upcoming = await callTMDB('movie/upcoming', { language: 'it_IT' })
-    database.film.ciao = { ciao: 'test' }
+        this.index = [];
+        this.list = [];
+    }
 
-    database.series = {}
-    database.series.popular = await callTMDB('discover/tv', { language: 'it_IT', sort_by: 'popularity.desc' })
-    database.series.action = await callTMDB('discover/tv', { language: 'it_IT', sort_by: 'popularity.desc', with_genres: 10759 })
-    database.series.on_the_air = await callTMDB('tv/on_the_air', { language: 'it_IT' })
-    return
+    getGenreId(index = null) {
+        if (index === null) {
+            return this.genres[Math.floor((Math.random() * this.genres.length))].id
+        }
+        return this.genres[index]
+    }
+
+    async search(query, genre) {
+        if (query) {
+            return await callTMDB(`search/${this.name === 'film' ? 'movie' : 'tv'}`, { query, language: 'it_IT' })
+        }
+        if (genre) {
+            return await callTMDB(`discover/${this.name === 'film' ? 'movie' : 'tv'}`, { language: 'it_IT', sort_by: 'popularity.desc', with_genres: genre })
+        }
+        if (this.index.length > 0) {
+            for (let i = 0; i < 3; i++) {
+                await TMDB.add(this.name)
+            }
+        }
+        return TMDB.data()
+    }
 }
+
+let TMDB = {
+    film: new Collections('film', [
+        {
+            "id": 0,
+            "name": "Popolari"
+        },
+        {
+            "id": 28,
+            "name": "Azione"
+        },
+        {
+            "id": 12,
+            "name": "Avventura"
+        },
+        {
+            "id": 16,
+            "name": "Animazione"
+        },
+        {
+            "id": 35,
+            "name": "Commedia"
+        },
+        {
+            "id": 80,
+            "name": "Crime"
+        },
+        {
+            "id": 99,
+            "name": "Documentario"
+        },
+        {
+            "id": 18,
+            "name": "Dramma"
+        },
+        {
+            "id": 10751,
+            "name": "Famiglia"
+        },
+        {
+            "id": 14,
+            "name": "Fantasy"
+        },
+        {
+            "id": 36,
+            "name": "Storia"
+        },
+        {
+            "id": 27,
+            "name": "Horror"
+        },
+        {
+            "id": 10402,
+            "name": "Musica"
+        },
+        {
+            "id": 9648,
+            "name": "Mistero"
+        },
+        {
+            "id": 10749,
+            "name": "Romance"
+        },
+        {
+            "id": 878,
+            "name": "Fantascienza"
+        },
+        {
+            "id": 10770,
+            "name": "televisione film"
+        },
+        {
+            "id": 53,
+            "name": "Thriller"
+        },
+        {
+            "id": 10752,
+            "name": "Guerra"
+        },
+        {
+            "id": 37,
+            "name": "Western"
+        }
+
+    ]),
+    series: new Collections('series', [
+        {
+            "id": 0,
+            "name": "Popolari"
+        },
+        {
+            "id": 10759,
+            "name": "Action & Adventure"
+        },
+        {
+            "id": 16,
+            "name": "Animazione"
+        },
+        {
+            "id": 35,
+            "name": "Commedia"
+        },
+        {
+            "id": 80,
+            "name": "Crime"
+        },
+        {
+            "id": 99,
+            "name": "Documentario"
+        },
+        {
+            "id": 18,
+            "name": "Dramma"
+        },
+        {
+            "id": 10751,
+            "name": "Famiglia"
+        },
+        {
+            "id": 10762,
+            "name": "Kids"
+        },
+        {
+            "id": 9648,
+            "name": "Mistero"
+        },
+        {
+            "id": 10763,
+            "name": "News"
+        },
+        {
+            "id": 10764,
+            "name": "Reality"
+        },
+        {
+            "id": 10765,
+            "name": "Sci-Fi & Fantasy"
+        },
+        {
+            "id": 10766,
+            "name": "Soap"
+        },
+        {
+            "id": 10767,
+            "name": "Talk"
+        },
+        {
+            "id": 10768,
+            "name": "War & Politics"
+        },
+        {
+            "id": 37,
+            "name": "Western"
+        }
+    ]),
+
+    async data() {
+        if (this.film.index.length === 0 || this.series.index.length === 0) {
+            await this.fill();
+        }
+        return { film: this.film, series: this.series }
+    },
+
+    async search(query) {
+        const film = await callTMDB('search/movie', { query, language: 'it_IT' })
+        const series = await callTMDB('search/tv', { query, language: 'it_IT' })
+        const biggerArrLength = film.length >= series.length ? film.length : series.length;
+
+        const res = []
+        for (let index = 0; index < biggerArrLength; index++) {
+            if (film[index]) {
+                res.push(film[index])
+            }
+            if (series[index]) {
+                res.push(series[index])
+            }
+        }
+        return res
+    },
+
+
+    async fill() {
+        for (let i = 0; i < 3; i++) {
+            if (i === 0) {
+                await this.add('film', 0)
+                await this.add('series', 0)
+            } else {
+                await this.add('film')
+                await this.add('series')
+            }
+        }
+        return
+    },
+    async add(_type, genre = null) {
+        const query = { language: 'it_IT', sort_by: 'popularity.desc' }
+
+        if (genre === null && this[_type].index.length < this[_type].genres.length) {
+            let randomGenre = 0
+            do {
+                randomGenre = this[_type].getGenreId();
+                console.log(randomGenre);
+
+            } while (this[_type].index.includes(randomGenre));
+            genre = randomGenre;
+        }
+
+        if (genre !== 0) { query.with_genres = genre }
+        if (this[_type].index.length < this[_type].genres.length) {
+            this[_type].list.push(await callTMDB(`discover/${_type === 'film' ? 'movie' : 'tv'}`, query));
+            this[_type].index.push(genre);
+        }
+        return
+    }
+};
 
 async function callTMDB(action = 'discover/movie', params = { language: 'it_IT', sort_by: 'popularity.desc' }) {
     const options = {
@@ -115,13 +325,14 @@ function parseMovies(res) {
             original_language,
             original_title,
             original_name,
+            known_for,
             overview,
             popularity,
             poster_path,
             vote_average
         } = movie;
         return {
-            movieType: original_title ? 'film' : 'series',
+            movieType: original_title ? 'film' : known_for ? 'actor' : 'series',
             adult,
             img_main: backdrop_path,
             genre_ids,
@@ -133,7 +344,8 @@ function parseMovies(res) {
             img_poster: poster_path,
             release_date: first_air_date,
             title: title ?? name,
-            vote_average
+            vote_average,
+            known_for
         }
     });
 }

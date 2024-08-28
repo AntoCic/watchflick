@@ -1,0 +1,49 @@
+.home-loghi {
+    height: 3em;
+    margin-top: 6px;
+    margin-right: 6px;
+    will-change: filter;
+    transition: filter 300ms;
+}
+
+.home-loghi:hover {
+    filter: drop-shadow(0 0 2em rgb(100, 108, 255));
+}
+
+.home-loghi.react:hover {
+    filter: drop-shadow(0 0 2em rgb(97, 218, 251));
+}
+
+.home-loghi.tailwind:hover {
+    filter: drop-shadow(0 0 2em rgb(97, 218, 251));
+}
+
+@media (prefers-reduced-motion: no-preference) {
+    .home-loghi.react {
+        animation: logo-spin infinite 20s linear;
+    }
+
+    .home-loghi.redux {
+        animation: logo-spin-rev infinite 5s linear;
+    }
+}
+
+@keyframes logo-spin {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes logo-spin-rev {
+    from {
+        transform: rotate(360deg);
+    }
+
+    to {
+        transform: rotate(00deg);
+    }
+}
