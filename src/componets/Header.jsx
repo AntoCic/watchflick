@@ -58,8 +58,8 @@ function Header() {
         <div className="flex-none mx-auto">
           <NavLink to='film' onClick={resetSearch} className={({ isActive }) => (isActive ? btn.azul : btn.outWhite)} >film</NavLink>
           <NavLink to='series' onClick={resetSearch} className={({ isActive }) => (isActive ? btn.azul : btn.outWhite)} >series</NavLink>
-          <input type="text" ref={inputRef} className='ms-2 py-1 px-2 pb-2 border-2 rounded-l border-white  border-r-black bg-slate-950 text-white' placeholder='search' />
-          <button className="rounded-r text-white pt-1 px-2 pb-2 border-2 border-white border-l-black hover:bg-white hover:text-zinc-900" onClick={handleSearch} > CERCA </button>
+          <input type="text" ref={inputRef} className='ms-2 py-1 px-2 pb-2 border-2 rounded-l border-white  clear-border-r bg-slate-950 text-white' placeholder='search' />
+          <button className="rounded-r text-white pt-1 px-2 pb-2 border-2 border-white clear-border-l hover:bg-white hover:text-zinc-900" onClick={handleSearch} > CERCA </button>
         </div>
 
 

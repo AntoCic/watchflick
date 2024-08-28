@@ -25,6 +25,14 @@ main {
     flex-grow: 1;
 }
 
+.clear-border-r {
+    border-right: 0;
+}
+
+.clear-border-l {
+    border-left: 0;
+}
+
 /* UTILITY */
 .ms-bg-orange {
     background-color: #e79200;
