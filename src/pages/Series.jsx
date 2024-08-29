@@ -5,11 +5,7 @@ import SearchMovies from '../componets/SearchMovies'
 import { set } from '../redux/moviesSlice'
 import axios from 'axios';
 
-// ASSETS
-
-// STYLE
-
-function Series() {
+export default function Series() {
   const movies = useSelector((state) => state.movies.value);
   const currentSearch = useSelector((state) => state.currentSearch.value);
   const dispatch = useDispatch();
@@ -18,7 +14,6 @@ function Series() {
   useEffect(() => {
     axios.post('/api/get/series')
       .then((res) => {
-        console.log(res.data);
         dispatch(set(res.data));
       })
   }, []);
@@ -28,15 +23,15 @@ function Series() {
       <h1 className='text-4xl text-center'>Series</h1>
       {movies && movies.series && (
         <>
-          {currentSearch && currentSearch.list && currentSearch.list.length > 0 ? (
-            <SearchMovies movies={currentSearch.list} />
+          {currentSearch && currentSearch.length > 0 ? (
+            <SearchMovies movies={currentSearch} category="search" />
           ) : (
             movies.series.list.map((film, i) => (
               <div key={i}>
                 <h3 className='container mx-auto px-4 text-2xl font-bold'>
                   {movies.series.genres.find((film) => film.id === movies.series.index[i]).name}
                 </h3>
-                <RowMovies movies={film} />
+                <RowMovies movies={film} category="series" index={i} />
               </div>
             )))}
         </>
@@ -44,5 +39,3 @@ function Series() {
     </div>
   );
 }
-
-export default Series

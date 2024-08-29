@@ -5,6 +5,7 @@ import App from './App';
 import Contact from './pages/Contact';
 import Film from './pages/Film';
 import Series from './pages/Series';
+import MovieShow from './pages/MovieShow';
 
 const router = createBrowserRouter([
     {
@@ -26,6 +27,10 @@ const router = createBrowserRouter([
             {
                 path: "series",
                 element: <Series />,
+            },
+            {
+                path: "/:category/:index/:movie_id",
+                element: <MovieShow />,
             },
         ]
     },

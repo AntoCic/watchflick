@@ -17,19 +17,17 @@ exports.handler = async function (event) {
 
     await router.POST('get', async () => {
         const where = router.params(1)
+        let query = router.bodyParams ? router.bodyParams.query !== undefined ? router.bodyParams.query : null : null
+        let genre = router.bodyParams ? router.bodyParams.genre !== undefined ? router.bodyParams.genre : null : null
         if (where) {
             if (where === 'film' || where === 'series') {
-                let query = router.bodyParams ? router.bodyParams.query !== undefined ? router.bodyParams.query : null : null
-                let genre = router.bodyParams ? router.bodyParams.genre !== undefined ? router.bodyParams.genre : null : null
                 router.setRes(await TMDB[where].search(query, genre));
             }
         } else {
-            let { query } = router.bodyParams
-
             if (query) {
                 router.setRes(await TMDB.search(query));
             } else {
-                router.error(400, '|I| Missing query');
+                router.setRes(await TMDB.search(null, genre));
             }
         }
     })
@@ -240,9 +238,17 @@ let TMDB = {
         return { film: this.film, series: this.series }
     },
 
-    async search(query) {
-        const film = await callTMDB('search/movie', { query, language: 'it_IT' })
-        const series = await callTMDB('search/tv', { query, language: 'it_IT' })
+    async search(query, genre = null) {
+        let film;
+        let series;
+        if (genre === null) {
+            film = await callTMDB('search/movie', { query, language: 'it_IT' })
+            series = await callTMDB('search/tv', { query, language: 'it_IT' })
+        } else {
+            film = await callTMDB('discover/movie', { with_genres: genre, language: 'it_IT', sort_by: 'popularity.desc' })
+            series = await callTMDB('discover/tv', { with_genres: genre, language: 'it_IT', sort_by: 'popularity.desc' })
+        }
+
         const biggerArrLength = film.length >= series.length ? film.length : series.length;
 
         const res = []
@@ -277,7 +283,6 @@ let TMDB = {
             let randomGenre = 0
             do {
                 randomGenre = this[_type].getGenreId();
-                console.log(randomGenre);
 
             } while (this[_type].index.includes(randomGenre));
             genre = randomGenre;

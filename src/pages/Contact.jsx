@@ -1,4 +1,4 @@
-function Contact() {
+export default function Contact() {
   const name = 'Antonino Cicala';
   const email = 'anto.cic.127@gmail.com';
   const phone = '+39 3295436315';
@@ -38,4 +38,3 @@ function Contact() {
     </div>
   )
 }
-export default Contact

@@ -1,17 +1,18 @@
-import { NavLink, useMatch } from 'react-router-dom'
-import { btn } from '../GeneralCmpTailwind';
-import { useRef } from 'react';
+import { NavLink, useMatch, useNavigate } from 'react-router-dom'
+import { useRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { set } from '../redux/currentSearchSlice'
 import axios from 'axios';
 // ASSETS
 import mainLogo from '/logo.png'
-// STYLE
-import '../style/Header.css'
 
 function Header() {
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const inputRef = useRef(null);
+
+  // Stato per il placeholder
+  const [inputPlaceholder, setInputPlaceholder] = useState('search');
 
   const logoClass = {
     width: '80px',
@@ -19,7 +20,7 @@ function Header() {
   }
 
   const resetSearch = () => {
-    dispatch(set({ list: [], current: null }));
+    dispatch(set([]));
     inputRef.current.value = ''
   }
 
@@ -31,20 +32,28 @@ function Header() {
   whereSearch = home ? '' : whereSearch;
   whereSearch = film ? '/film' : whereSearch;
   whereSearch = series ? '/series' : whereSearch;
-
   const handleSearch = () => {
-    axios.post(`/api/get${whereSearch}`, { query: inputRef.current.value })
-      .then((res) => {
-        console.log(set({ list: res.data, current: null }));
-
-        dispatch(set({ list: res.data, current: null }));
-      })
+    if (inputRef.current.value.trim() !== '') {
+      axios.post(`/api/get${whereSearch}`, { query: inputRef.current.value })
+        .then((res) => {
+          dispatch(set(res.data));
+          if (res.data, length === 0) {
+            setInputPlaceholder('Nessun risultato trovato');
+            inputRef.current.value = ''
+          }
+        })
+    }
   }
 
+  const handleClickSearchInpt = () => {
+    setInputPlaceholder('search');
+    navigate(whereSearch);
+  }
 
+  // STYLE
+  const selected = 'p-2 text-red-700 underline'
+  const anSelected = 'p-2'
 
-
-  console.log(home, film, series);
   return (
     <header className='container mx-auto px-4 py-2'>
       <nav className="flex flex-wrap items-center text-white">
@@ -54,16 +63,22 @@ function Header() {
           </NavLink>
         </div>
 
-
         <div className="flex-none mx-auto">
-          <NavLink to='film' onClick={resetSearch} className={({ isActive }) => (isActive ? btn.azul : btn.outWhite)} >film</NavLink>
-          <NavLink to='series' onClick={resetSearch} className={({ isActive }) => (isActive ? btn.azul : btn.outWhite)} >series</NavLink>
-          <input type="text" ref={inputRef} className='ms-2 py-1 px-2 pb-2 border-2 rounded-l border-white  clear-border-r bg-slate-950 text-white' placeholder='search' />
-          <button className="rounded-r text-white pt-1 px-2 pb-2 border-2 border-white clear-border-l hover:bg-white hover:text-zinc-900" onClick={handleSearch} > CERCA </button>
+          {/* <NavLink to='/' onClick={resetSearch} className={({ isActive }) => (isActive ? selected + " align-middle" : anSelected+ " align-middle")} > */}
+          <NavLink to='/' onClick={resetSearch} className={({ isActive }) => (isActive ? selected : anSelected)} >
+            <span className="material-symbols-outlined align-sub">
+              home
+            </span>
+          </NavLink>
+          <NavLink to='film' onClick={resetSearch} className={({ isActive }) => (isActive ? selected : anSelected)} >film</NavLink>
+          <NavLink to='series' onClick={resetSearch} className={({ isActive }) => (isActive ? selected : anSelected)} >series</NavLink>
+          <input type="text" ref={inputRef} className={'ms-2 p-2 border-2 rounded-l border-white  clear-border-r bg-slate-950 text-white '} placeholder={inputPlaceholder} onClick={handleClickSearchInpt} />
+          <button className="rounded-r text-white p-2 border-2 border-white clear-border-l hover:bg-white hover:text-zinc-900" onClick={handleSearch} >
+            <span className="material-symbols-outlined align-bottom">
+              search
+            </span>
+          </button>
         </div>
-
-
-
 
       </nav>
     </header>
