@@ -74,7 +74,7 @@ function Header() {
           </NavLink>
           <NavLink to='film' onClick={resetSearch} className={({ isActive }) => (isActive ? selected : anSelected)} >film</NavLink>
           <NavLink to='series' onClick={resetSearch} className={({ isActive }) => (isActive ? selected : anSelected)} >series</NavLink>
-          <input type="text" ref={inputRef} className={'ms-2 p-2 border-2 rounded-l border-white  clear-border-r bg-slate-950 text-white '} placeholder={inputPlaceholder} onClick={handleClickSearchInpt} />
+          <input type="text" ref={inputRef} className={'ms-2 p-2 border-2 rounded-l border-white  clear-border-r bg-slate-950 text-white max-w-36'} placeholder={inputPlaceholder} onClick={handleClickSearchInpt} />
           <button className="rounded-r text-white p-2 border-2 border-white clear-border-l hover:bg-white hover:text-zinc-900" onClick={handleSearch} >
             <span className="material-symbols-outlined align-bottom">
               search
