@@ -36,11 +36,13 @@ export default function MovieShow() {
     <>
       {movie && (
         <div key={movie.id} className="container mx-auto px-4">
-          <img
-            src={`https://image.tmdb.org/t/p/w342${movie.img_poster || movie.img_main}`}
-            className="inline-block w-full"
-            alt={`Poster of ${movie.title}`}
-          />
+          <div className="max-w-xs mx-auto">
+            <img
+              src={`https://image.tmdb.org/t/p/w342${movie.img_poster || movie.img_main}`}
+              className="w-full"
+              alt={`Poster of ${movie.title}`}
+            />
+          </div>
           <p className="text-2xl">{movie.title}</p>
           {movie.title !== movie.original_title && (
             <p className="text-start">Titolo Originale: {movie.original_title}</p>
@@ -54,7 +56,7 @@ export default function MovieShow() {
           </div>
           <div className="flex mt-2">
             {movie.genre_ids.map((genre_id, i) => (
-              <span key={genre_id}>{movies[movie.movieType].genres.find((e) => e.id == genre_id).name}{i + 1 < movie.genre_ids.length && ","}&nbsp;</span>
+              <span key={genre_id}>{movies[movie.movieType].genres.find((e) => e.id == genre_id)?.name}{i + 1 < movie.genre_ids.length && ","}&nbsp;</span>
             ))}
           </div>
           <p className="text-start">Lingua: {movie.original_language}</p>

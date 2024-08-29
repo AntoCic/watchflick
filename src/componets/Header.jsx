@@ -37,6 +37,8 @@ function Header() {
       axios.post(`/api/get${whereSearch}`, { query: inputRef.current.value })
         .then((res) => {
           dispatch(set(res.data));
+          console.log(res.data);
+          
           if (res.data, length === 0) {
             setInputPlaceholder('Nessun risultato trovato');
             inputRef.current.value = ''
